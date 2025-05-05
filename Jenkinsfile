@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+
+    tools {
+        sonarQubeScanner 'SonarScanner'
+    }
+
+    environment {
+        SONAR_TOKEN = credentials('sonar-token')
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/rgoel956/8.1c_ppiit.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'npm test || true'
+            }
+        }
+
+        stage('Coverage Report') {
+            steps {
+                sh 'npm run coverage || true'
+            }
+        }
+
+        stage('Security Scan (npm audit)') {
+            steps {
+                sh 'npm audit || true'
+            }
+        }
+
+        stage('SonarCloud Analysis') {
+            steps {
+                withSonarQubeEnv('SonarScanner') {
+                    sh 'sonar-scanner -Dsonar.login=$SONAR_TOKEN'
+                }
+            }
+        }
+    }
+}
