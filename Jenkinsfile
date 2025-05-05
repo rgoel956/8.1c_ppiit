@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        sonarQubeScanner 'SonarScanner'
-    }
-
     environment {
         SONAR_TOKEN = credentials('sonar-token')
     }
@@ -49,3 +45,4 @@ pipeline {
         }
     }
 }
+
