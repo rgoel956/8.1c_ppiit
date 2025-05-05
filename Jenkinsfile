@@ -36,13 +36,21 @@ pipeline {
             }
         }
 
-        stage('SonarCloud Analysis') {
-            steps {
-                withSonarQubeEnv('SonarScanner') {
-                   sh '/opt/sonar-scanner/bin/sonar-scanner -Dsonar.login=$SONAR_TOKEN'
-                }
-            }
+stage('SonarCloud Analysis') {
+    steps {
+        withSonarQubeEnv('SonarScanner') {
+            sh '''
+                /opt/sonar-scanner/bin/sonar-scanner \
+                -Dsonar.login=$SONAR_TOKEN \
+                -Dsonar.projectKey=8.1c_ppiit \
+                -Dsonar.organization=rgoel956 \
+                -Dsonar.sources=. \
+                -Dsonar.exclusions=node_modules/**,coverage/** \
+                -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            '''
         }
     }
 }
+
+
 
