@@ -39,7 +39,7 @@ pipeline {
         stage('SonarCloud Analysis') {
             steps {
                 withSonarQubeEnv('SonarScanner') {
-                    sh 'sonar-scanner -Dsonar.login=$SONAR_TOKEN'
+                   sh '/opt/sonar-scanner/bin/sonar-scanner -Dsonar.login=$SONAR_TOKEN'
                 }
             }
         }
